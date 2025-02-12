@@ -8,6 +8,11 @@ use App\Models\Slide; //masukan model slide
 use App\Models\Article; //masukan model article
 use App\Models\Material; //masukan model article
 use App\Models\Regulation; //masukan model article
+use App\Models\DomainKebijakan; //masukan model domain kebijakan
+use App\Models\DomainLayanan; //masukan model domain layanan
+use App\Models\DomainTatakelola; //masukan model domain tatakelola
+use App\Models\DomainManajemen; //masukan model domain manajemen
+use App\Models\Application; //masukan model application
 use Illuminate\Http\Request;
 use App\Models\SelfAssessment;
 use App\Models\FinalAssessment;
@@ -153,6 +158,262 @@ class AdminController extends Controller
     {
         return view('admin.content.clientsDomain');
     }
+    public function clientsDomainKebijakan()
+    {
+        $domains = DomainKebijakan::all();
+        return view('admin.content.clientsDomainKebijakan', compact('domains'));
+    }
+    public function storeDomainKebijakan(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'aspect_name' => 'required|string|max:255', // Tambahkan panjang maksimum
+            'indicators' => 'required|array|min:1', // Memastikan ada minimal satu indikator
+            'indicators.*' => 'string|max:255', // Validasi panjang indikator
+        ]);
+
+        // Menyimpan Domain Kebijakan
+        $domain = new DomainKebijakan();
+        $domain->aspect_name = $request->input('aspect_name');
+        $domain->indicators = json_encode($request->input('indicators')); // Menyimpan indikator sebagai JSON
+        $domain->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('admin.domain.kebijakan')->with('success', 'Domain Kebijakan berhasil disimpan.');
+    }
+    public function updateDomainKebijakan(Request $request, $id)
+    {
+        // Validasi input
+        $request->validate([
+            'aspect_name' => 'required|string|max:255', // Validasi panjang maksimal
+            'indicators' => 'required|array|min:1', // Memastikan ada minimal satu indikator
+            'indicators.*' => 'string|max:255', // Validasi panjang indikator
+        ]);
+
+        try {
+            // Menemukan data domain berdasarkan ID
+            $domain = DomainKebijakan::findOrFail($id);
+
+            // Memperbarui data domain kebijakan
+            $domain->aspect_name = $request->input('aspect_name');
+            $domain->indicators = json_encode($request->input('indicators')); // Menyimpan indikator sebagai JSON
+            $domain->save();
+
+            // Redirect dengan pesan sukses
+            return redirect()->route('admin.domain.kebijakan')->with('success', 'Domain Kebijakan berhasil diperbarui.');
+        } catch (\Exception $e) {
+            // Menangani jika ID tidak ditemukan atau terjadi kesalahan
+            return redirect()->route('admin.domain.kebijakan')->with('error', 'Terjadi kesalahan saat memperbarui domain kebijakan.');
+        }
+    }
+    public function deleteDomainKebijakan($id)
+    {
+        try {
+            // Menemukan domain kebijakan berdasarkan ID dan menghapusnya
+            $domain = DomainKebijakan::findOrFail($id);
+            $domain->delete();
+
+            // Redirect dengan pesan sukses
+            return redirect()->route('admin.domain.kebijakan')->with('success', 'Domain Kebijakan berhasil dihapus.');
+        } catch (\Exception $e) {
+            // Menangani jika ID tidak ditemukan atau terjadi kesalahan
+            return redirect()->route('admin.domain.kebijakan')->with('error', 'Terjadi kesalahan saat menghapus domain kebijakan.');
+        }
+    }
+
+
+
+
+    public function clientsDomainTatakelola()
+    {
+        $domains = DomainTatakelola::all();
+        return view('admin.content.clientsDomainTatakelola', compact('domains'));
+    }
+    public function storeDomainTatakelola(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'aspect_name' => 'required|string|max:255', // Tambahkan panjang maksimum
+            'indicators' => 'required|array|min:1', // Memastikan ada minimal satu indikator
+            'indicators.*' => 'string|max:255', // Validasi panjang indikator
+        ]);
+
+        // Menyimpan Domain Tatakelola
+        $domain = new DomainTatakelola();
+        $domain->aspect_name = $request->input('aspect_name');
+        $domain->indicators = json_encode($request->input('indicators')); // Menyimpan indikator sebagai JSON
+        $domain->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('admin.domain.tatakelola')->with('success', 'Domain Tatakelola berhasil disimpan.');
+    }
+    public function updateDomainTatakelola(Request $request, $id)
+    {
+        // Validasi input
+        $request->validate([
+            'aspect_name' => 'required|string|max:255', // Validasi panjang maksimal
+            'indicators' => 'required|array|min:1', // Memastikan ada minimal satu indikator
+            'indicators.*' => 'string|max:255', // Validasi panjang indikator
+        ]);
+
+        try {
+            // Menemukan data domain berdasarkan ID
+            $domain = DomainTatakelola::findOrFail($id);
+
+            // Memperbarui data domain tatakelola
+            $domain->aspect_name = $request->input('aspect_name');
+            $domain->indicators = json_encode($request->input('indicators')); // Menyimpan indikator sebagai JSON
+            $domain->save();
+
+            // Redirect dengan pesan sukses
+            return redirect()->route('admin.domain.tatakelola')->with('success', 'Domain Tatakelola berhasil diperbarui.');
+        } catch (\Exception $e) {
+            // Menangani jika ID tidak ditemukan atau terjadi kesalahan
+            return redirect()->route('admin.domain.tatakelola')->with('error', 'Terjadi kesalahan saat memperbarui domain tatakelola.');
+        }
+    }
+    public function deleteDomainTatakelola($id)
+    {
+        try {
+            // Menemukan domain tatakelola berdasarkan ID dan menghapusnya
+            $domain = DomainTatakelola::findOrFail($id);
+            $domain->delete();
+
+            // Redirect dengan pesan sukses
+            return redirect()->route('admin.domain.tatakelola')->with('success', 'Domain Tatakelola berhasil dihapus.');
+        } catch (\Exception $e) {
+            // Menangani jika ID tidak ditemukan atau terjadi kesalahan
+            return redirect()->route('admin.domain.tatakelola')->with('error', 'Terjadi kesalahan saat menghapus domain tatakelola.');
+        }
+    }
+
+    public function clientsDomainManajemen()
+    {
+        $domains = DomainManajemen::all();
+        return view('admin.content.clientsDomainManajemen', compact('domains'));
+    }
+
+    public function storeDomainManajemen(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'aspect_name' => 'required|string|max:255', // Tambahkan panjang maksimum
+            'indicators' => 'required|array|min:1', // Memastikan ada minimal satu indikator
+            'indicators.*' => 'string|max:255', // Validasi panjang indikator
+        ]);
+
+        // Menyimpan Domain Manajemen
+        $domain = new DomainManajemen();
+        $domain->aspect_name = $request->input('aspect_name');
+        $domain->indicators = json_encode($request->input('indicators')); // Menyimpan indikator sebagai JSON
+        $domain->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('admin.domain.manajemen')->with('success', 'Domain Manajemen berhasil disimpan.');
+    }
+    public function updateDomainManajemen(Request $request, $id)
+    {
+        // Validasi input
+        $request->validate([
+            'aspect_name' => 'required|string|max:255', // Validasi panjang maksimal
+            'indicators' => 'required|array|min:1', // Memastikan ada minimal satu indikator
+            'indicators.*' => 'string|max:255', // Validasi panjang indikator
+        ]);
+
+        try {
+            // Menemukan data domain berdasarkan ID
+            $domain = DomainManajemen::findOrFail($id);
+
+            // Memperbarui data domain manajemen
+            $domain->aspect_name = $request->input('aspect_name');
+            $domain->indicators = json_encode($request->input('indicators')); // Menyimpan indikator sebagai JSON
+            $domain->save();
+
+            // Redirect dengan pesan sukses
+            return redirect()->route('admin.domain.manajemen')->with('success', 'Domain Manajemen berhasil diperbarui.');
+        } catch (\Exception $e) {
+            // Menangani jika ID tidak ditemukan atau terjadi kesalahan
+            return redirect()->route('admin.domain.manajemen')->with('error', 'Terjadi kesalahan saat memperbarui domain manajemen.');
+        }
+    }
+    public function deleteDomainManajemen($id)
+    {
+        try {
+            // Menemukan domain manajemen berdasarkan ID dan menghapusnya
+            $domain = DomainManajemen::findOrFail($id);
+            $domain->delete();
+
+            // Redirect dengan pesan sukses
+            return redirect()->route('admin.domain.manajemen')->with('success', 'Domain Manajemen berhasil dihapus.');
+        } catch (\Exception $e) {
+            // Menangani jika ID tidak ditemukan atau terjadi kesalahan
+            return redirect()->route('admin.domain.manajemen')->with('error', 'Terjadi kesalahan saat menghapus domain manajemen.');
+        }
+    }
+
+    public function clientsDomainLayanan()
+    {
+        $domains = DomainLayanan::all();
+        return view('admin.content.clientsDomainLayanan', compact('domains'));
+    } 
+
+    public function storeDomainLayanan(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'aspect_name' => 'required|string|max:255', // Tambahkan panjang maksimum
+            'indicators' => 'required|array|min:1', // Memastikan ada minimal satu indikator
+            'indicators.*' => 'string|max:255', // Validasi panjang indikator
+        ]);
+
+        // Menyimpan Domain Layanan
+        $domain = new DomainLayanan();
+        $domain->aspect_name = $request->input('aspect_name');
+        $domain->indicators = json_encode($request->input('indicators')); // Menyimpan indikator sebagai JSON
+        $domain->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('admin.domain.layanan')->with('success', 'Domain Layanan berhasil disimpan.');
+    }
+    public function updateDomainLayanan(Request $request, $id)
+    {
+        // Validasi input
+        $request->validate([
+            'aspect_name' => 'required|string|max:255', // Validasi panjang maksimal
+            'indicators' => 'required|array|min:1', // Memastikan ada minimal satu indikator
+            'indicators.*' => 'string|max:255', // Validasi panjang indikator
+        ]);
+
+        try {
+            // Menemukan data domain berdasarkan ID
+            $domain = DomainLayanan::findOrFail($id);
+
+            // Memperbarui data domain layanan
+            $domain->aspect_name = $request->input('aspect_name');
+            $domain->indicators = json_encode($request->input('indicators')); // Menyimpan indikator sebagai JSON
+            $domain->save();
+
+            // Redirect dengan pesan sukses
+            return redirect()->route('admin.domain.layanan')->with('success', 'Domain Layanan berhasil diperbarui.');
+        } catch (\Exception $e) {
+            // Menangani jika ID tidak ditemukan atau terjadi kesalahan
+            return redirect()->route('admin.domain.layanan')->with('error', 'Terjadi kesalahan saat memperbarui domain layanan.');
+        }
+    }
+    public function deleteDomainLayanan($id)
+    {
+        try {
+            // Menemukan domain layanan berdasarkan ID dan menghapusnya
+            $domain = DomainLayanan::findOrFail($id);
+            $domain->delete();
+
+            // Redirect dengan pesan sukses
+            return redirect()->route('admin.domain.layanan')->with('success', 'Domain Layanan berhasil dihapus.');
+        } catch (\Exception $e) {
+            // Menangani jika ID tidak ditemukan atau terjadi kesalahan
+            return redirect()->route('admin.domain.layanan')->with('error', 'Terjadi kesalahan saat menghapus domain layanan.');
+        }
+    }
 
     // Menampilkan halaman artikel
     public function clientsArticle()
@@ -239,205 +500,237 @@ class AdminController extends Controller
      // Menampilkan halaman clientsAbout dengan data Material & Regulation
     public function clientsAbout()
     {
-        $materials = Material::all();
-        $regulations = Regulation::all();
-
-        return view('admin.content.clientsAbout', compact('materials', 'regulations'));
+        return view('admin.content.clientsAbout');
     }
-
      // ===========================
      // CRUD UNTUK MATERIAL
      // ===========================
 
-     public function storeClientsAbout(Request $request)
-     {
-         $request->validate([
-             'type' => 'required|in:material,regulation',
-             'material_name' => 'nullable|required_if:type,material|max:255',
-             'material_file' => 'nullable|required_if:type,material|file|mimes:pdf,doc,docx|max:2048',
-             'regulation_category' => 'nullable|required_if:type,regulation|max:255',
-             'regulation_title' => 'nullable|required_if:type,regulation|max:255',
-             'regulation_file' => 'nullable|required_if:type,regulation|file|mimes:pdf,doc,docx|max:2048',
-         ]);
-     
-         if ($request->type === 'material') {
-             // Simpan Material
-             $filePath = $request->file('material_file')->store('materials', 'public');
-     
-             Material::create([
-                 'name' => $request->material_name,
-                 'download_link' => $filePath,
-             ]);
-     
-             return redirect()->back()->with('success', 'Material berhasil ditambahkan!');
-         } elseif ($request->type === 'regulation') {
-             // Simpan Regulation
-             $filePath = $request->file('regulation_file')->store('regulations', 'public');
-     
-             Regulation::create([
-                 'category' => $request->regulation_category,
-                 'title' => $request->regulation_title,
-                 'file_path' => $filePath,
-             ]);
-     
-             return redirect()->back()->with('success', 'Regulasi berhasil ditambahkan!');
-         }
-     
-         return redirect()->back()->with('error', 'Terjadi kesalahan.');
-     }
-     
-     // Menyimpan Material baru
+    public function material() {
+        $materials = Material::all();
+        return view('admin.content.clientsAboutMaterial', compact('materials'));
+    }
+
+    // Menyimpan materi baru
     public function storeMaterial(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:255',
-            'file' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            'name' => 'required|string|max:255',
+            'file' => 'required|mimes:pdf,doc,docx|max:2048',
         ]);
 
+        // Simpan file ke storage/public/materials dan dapatkan path-nya
         $filePath = $request->file('file')->store('materials', 'public');
 
+        // Simpan data ke database
         Material::create([
-            'name' => $request->name,
-            'download_link' => $filePath,
+            'name' => $request->name, // Menyimpan nama materi
+            'download_link' => $filePath, // Menyimpan path file
         ]);
 
-        return redirect()->back()->with('success', 'Material berhasil ditambahkan!');
+    return redirect()->back()->with('success', 'Materi berhasil diunggah!');
     }
 
-     // Mengupdate Material
+    // Memperbarui materi yang ada
     public function updateMaterial(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|max:255',
-            'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+        'name' => 'required|string|max:255',
+        'file' => 'nullable|mimes:pdf,doc,docx|max:2048',
         ]);
 
         $material = Material::findOrFail($id);
-        $material->name = $request->name;
 
-        if ($request->hasFile('file')) {
-            Storage::disk('public')->delete($material->download_link);
-            $filePath = $request->file('file')->store('materials', 'public');
-            $material->download_link = $filePath;
+    // Jika ada file baru, hapus yang lama dan simpan yang baru
+    if ($request->hasFile('file')) {
+        Storage::disk('public')->delete($material->download_link);
+        $filePath = $request->file('file')->store('materials', 'public');
+        $material->download_link = $filePath;
         }
 
+        $material->name = $request->name;
+        $material->updated_at = now();
         $material->save();
 
-        return redirect()->back()->with('success', 'Material berhasil diperbarui!');
+    return redirect()->back()->with('success', 'Materi berhasil diperbarui!');
     }
 
-     // Menghapus Material
+    // Menghapus materi
     public function destroyMaterial($id)
     {
         $material = Material::findOrFail($id);
+        // Hapus file dari storage
         Storage::disk('public')->delete($material->download_link);
+        
+        // Hapus data dari database
         $material->delete();
 
-        return redirect()->back()->with('success', 'Material berhasil dihapus!');
-    }
+    return redirect()->back()->with('success', 'Materi berhasil dihapus!');
+    } 
 
      // ===========================
      // CRUD UNTUK REGULATION
      // ===========================
 
-     // Menyimpan Regulation baru
-    public function storeRegulation(Request $request)
-    {
-        $request->validate([
-            'category' => 'required|max:255',
-            'title' => 'required|max:255',
-            'file' => 'required|file|mimes:pdf,doc,docx|max:2048',
-        ]);
+    // Fungsi untuk menampilkan halaman regulasi
+public function regulasi()
+{
+    $regulations = Regulation::all(); // Ambil semua data regulasi
+    return view('admin.content.clientsAboutRegulasi', compact('regulations'));
+}
 
+// Fungsi untuk menyimpan regulasi baru
+public function storeRegulation(Request $request)
+{
+    $request->validate([
+        'category' => 'required|string|max:255',
+        'title' => 'required|string|max:255',
+        'file' => 'required|mimes:pdf,doc,docx|max:2048',
+    ]);
+
+    // Simpan file ke storage dan dapatkan path-nya
+    $filePath = $request->file('file')->store('regulations', 'public');
+
+    // Simpan data ke database
+    Regulation::create([
+        'title' => $request->title,
+        'category' => $request->category,
+        'file_path' => $filePath,
+    ]);
+
+    return redirect()->route('admin.regulasi')->with('success', 'Regulasi berhasil ditambahkan');
+}
+
+// Fungsi untuk memperbarui regulasi
+public function updateRegulation(Request $request, $id)
+{
+    $regulation = Regulation::findOrFail($id);
+
+    $request->validate([
+        'category' => 'required|string|max:255',
+        'title' => 'required|string|max:255',
+        'file' => 'nullable|mimes:pdf,doc,docx|max:2048',
+    ]);
+
+    // Jika ada file baru, simpan dan update path
+    if ($request->hasFile('file')) {
         $filePath = $request->file('file')->store('regulations', 'public');
-
-        Regulation::create([
-            'category' => $request->category,
-            'title' => $request->title,
-            'file_path' => $filePath,
-        ]);
-
-        return redirect()->back()->with('success', 'Regulasi berhasil ditambahkan!');
+        $regulation->file_path = $filePath;
     }
 
-     // Mengupdate Regulation
-    public function updateRegulation(Request $request, $id)
-    {
-        $request->validate([
-            'category' => 'required|max:255',
-            'title' => 'required|max:255',
-            'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-        ]);
+    $regulation->title = $request->title;
+    $regulation->category = $request->category;
+    $regulation->save();
 
-        $regulation = Regulation::findOrFail($id);
-        $regulation->category = $request->category;
-        $regulation->title = $request->title;
+    return redirect()->route('admin.regulasi')->with('success', 'Regulasi berhasil diperbarui');
+}
 
-        if ($request->hasFile('file')) {
-            Storage::disk('public')->delete($regulation->file_path);
-            $filePath = $request->file('file')->store('regulations', 'public');
-            $regulation->file_path = $filePath;
-        }
+// Fungsi untuk menghapus regulasi
+public function deleteRegulation($id)
+{
+    $regulation = Regulation::findOrFail($id);
 
-        $regulation->save();
-
-        return redirect()->back()->with('success', 'Regulasi berhasil diperbarui!');
-    }
-
-     // Menghapus Regulation
-    public function destroyRegulation($id)
-    {
-        $regulation = Regulation::findOrFail($id);
+    // Hapus file dari storage jika ada
+    if ($regulation->file_path) {
         Storage::disk('public')->delete($regulation->file_path);
-        $regulation->delete();
-
-        return redirect()->back()->with('success', 'Regulasi berhasil dihapus!');
     }
 
+    // Hapus data dari database
+    $regulation->delete();
+
+    return redirect()->route('admin.regulasi')->with('success', 'Regulasi berhasil dihapus');
+}
 
 
-    protected $skpdOptions = [
-        '1' => 'Test 1',
-        '2' => 'Test 2',
-        '3' => 'Test 3',
-    ];
 
-    protected $serviceOptions = [
-        '1' => 'Pelayanan',
-        '2' => 'Administrasi',
-    ];
 
-    public function application()
-    {
-        return view('admin.content.application', [
-            'skpdOptions' => $this->skpdOptions,
-            'serviceOptions' => $this->serviceOptions
-        ]);
-    }
+protected $skpdOptions = [
+    '1' => 'Test 1',
+    '2' => 'Test 2',
+    '3' => 'Test 3',
+];
 
-    public function storeApplication(Request $request)
-    {
-        $appName = $request->input('appName');
-        $skpdValue = $request->input('skpdValue');
-        $newSKPDInput = $request->input('newSKPDInput');
-        $serviceValue = $request->input('serviceValue');
-        $newServiceInput = $request->input('newServiceInput');
+protected $serviceOptions = [
+    '1' => 'Pelayanan',
+    '2' => 'Administrasi',
+];
 
-        if ($skpdValue === 'new' && !empty($newSKPDInput)) {
-            $newKey = count($this->skpdOptions) + 1;
-            $this->skpdOptions[$newKey] = $newSKPDInput;
-        }
+/**
+ * Menampilkan halaman aplikasi
+ */
+public function application()
+{
+    $aplikasi = Application::all(); // Ambil semua data aplikasi
 
-        if ($serviceValue === 'new' && !empty($newServiceInput)) {
-            $newKey = count($this->serviceOptions) + 1;
-            $this->serviceOptions[$newKey] = $newServiceInput;
-        }
+    return view('admin.content.application', [
+        'skpdOptions'    => $this->skpdOptions,
+        'serviceOptions' => $this->serviceOptions,
+        'aplikasi'       => $aplikasi // Kirim data ke view
+    ]);
+}
 
-        // Save the new application details
-        // $appName, $skpdValue (or $newSKPDInput if new), and $serviceValue (or $newServiceInput if new) can be stored in the database
+/**
+ * Menyimpan aplikasi baru ke database
+ */
+public function storeApplication(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'nama_aplikasi' => 'required|string|max:255',
+        'skpd_pemilik' => 'required|string|max:255',
+        'jenis_layanan' => 'required|string|max:255',
+        'spesifikasi_layanan' => 'nullable|string|max:255',
+        'alamat_website' => 'nullable|string|max:255',
+        'nama_pic' => 'required|string|max:255',
+        'kontak_wa' => 'required|string|max:20',
+    ]);
 
-        return response()->json(['status' => 'success', 'message' => 'Application saved successfully']);
-    }
+    // Simpan ke database
+    Application::create([
+        'nama_aplikasi' => $request->input('nama_aplikasi'),
+        'skpd_pemilik' => $request->input('skpd_pemilik'),
+        'jenis_layanan' => $request->input('jenis_layanan'),
+        'spesifikasi_layanan' => $request->input('spesifikasi_layanan'),
+        'alamat_website' => $request->input('alamat_website'),
+        'nama_pic' => $request->input('nama_pic'),
+        'kontak_wa' => $request->input('kontak_wa'),
+    ]);
+
+    // Redirect kembali ke halaman dengan pesan sukses
+    return redirect()->route('applications.index')->with('success', 'Aplikasi berhasil ditambahkan');
+}
+
+/**
+ * Mengupdate data aplikasi berdasarkan ID
+ */
+public function updateApplication(Request $request, $id)
+{
+    $request->validate([
+        'nama_aplikasi' => 'required|string|max:255',
+        'skpd_pemilik' => 'required|string|max:255',
+        'jenis_layanan' => 'required|string|max:255',
+        'spesifikasi_layanan' => 'nullable|string|max:255',
+        'alamat_website' => 'nullable|string|max:255',
+        'nama_pic' => 'required|string|max:255',
+        'kontak_wa' => 'required|string|max:20',
+    ]);
+
+    $application = Application::findOrFail($id);
+    $application->update($request->all());
+
+    return redirect()->route('applications.index')->with('success', 'Aplikasi berhasil diperbarui');
+}
+
+/**
+ * Menghapus aplikasi berdasarkan ID
+ */
+public function deleteApplication($id)
+{
+    $application = Application::findOrFail($id);
+    $application->delete();
+
+    return redirect()->route('applications.index')->with('success', 'Aplikasi berhasil dihapus');
+}
 
     public function profile()
     {

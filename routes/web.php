@@ -29,6 +29,17 @@ Route::prefix('admin')->group(function () {
         Route::post('/update-assessment/{id}', [AdminController::class, 'updateAssessment']);
         Route::get('/beranda-klien', [AdminController::class, 'clientsHome']);
         Route::get('/domain-klien', [AdminController::class, 'clientsDomain']);
+
+        //route untuk menu navbar pada domain 
+        Route::get('/domain/kebijakan', [AdminController::class, 'clientsDomainKebijakan']);
+        Route::get('/domain/tatakelola', [AdminController::class, 'clientsDomainTatakelola']);
+        Route::get('/domain/manajemen', [AdminController::class, 'clientsDomainManajemen']);
+        Route::get('/domain/layanan', [AdminController::class, 'clientsDomainLayanan']);
+        
+        //Route untuk menu navbar pada material dan regulasi
+        Route::get('/material', [AdminController::class, 'material'])->name('admin.material');
+        Route::get('/regulasi', [AdminController::class, 'regulasi'])->name('admin.regulasi');
+
         Route::get('/artikel-klien', [AdminController::class, 'clientsArticle']);
         Route::get('/tentang-klien', [AdminController::class, 'clientsAbout']);
         Route::get('/aplikasi', [AdminController::class, 'application'])->name('admin.application');
@@ -40,6 +51,56 @@ Route::prefix('admin')->group(function () {
         Route::post('homeContent', [AdminController::class, 'storeHomeContent'])->name('admin.storeHomeContent');
         Route::post('/admin/home-content/{id}', [AdminController::class, 'updateHomeContent'])->name('admin.updateHomeContent');
 
+         // Route untuk menampilkan daftar domain kebijakan
+        Route::get('domain-kebijakan', [AdminController::class, 'clientsDomainKebijakan'])->name('admin.domain.kebijakan');
+
+        // Route untuk menyimpan domain kebijakan
+        Route::post('domain-kebijakan/store', [AdminController::class, 'storeDomainKebijakan'])->name('admin.domain.kebijakan.store');
+
+        // Route untuk mengupdate domain kebijakan
+        Route::put('domain-kebijakan/update/{id}', [AdminController::class, 'updateDomainKebijakan'])->name('admin.domain.kebijakan.update');
+
+        // Route untuk menghapus domain kebijakan
+        Route::delete('domain-kebijakan/delete/{id}', [AdminController::class, 'deleteDomainKebijakan'])->name('admin.domain.kebijakan.delete');
+
+
+        // Route untuk menampilkan daftar domain tatakelola
+        Route::get('domain-tatakelola', [AdminController::class, 'clientsDomainTatakelola'])->name('admin.domain.tatakelola');
+
+        // Route untuk menyimpan domain tatakelola
+        Route::post('domain-tatakelola/store', [AdminController::class, 'storeDomainTatakelola'])->name('admin.domain.tatakelola.store');
+
+        // Route untuk mengupdate domain tatakelola
+        Route::put('domain-tatakelola/update/{id}', [AdminController::class, 'updateDomainTatakelola'])->name('admin.domain.tatakelola.update');
+
+        // Route untuk menghapus domain tatakelola
+        Route::delete('domain-tatakelola/delete/{id}', [AdminController::class, 'deleteDomainTatakelola'])->name('admin.domain.tatakelola.delete');
+
+        // Route untuk menampilkan daftar domain manajemen
+        Route::get('domain-manajemen', [AdminController::class, 'clientsDomainManajemen'])->name('admin.domain.manajemen');
+
+        // Route untuk menyimpan domain manajemen
+        Route::post('domain-manajemen/store', [AdminController::class, 'storeDomainManajemen'])->name('admin.domain.manajemen.store');
+
+        // Route untuk mengupdate domain manajemen
+        Route::put('domain-manajemen/update/{id}', [AdminController::class, 'updateDomainManajemen'])->name('admin.domain.manajemen.update');
+
+        // Route untuk menghapus domain manajemen
+        Route::delete('domain-manajemen/delete/{id}', [AdminController::class, 'deleteDomainManajemen'])->name('admin.domain.manajemen.delete');
+
+        // Route untuk menampilkan daftar domain layanan
+        Route::get('domain-layanan', [AdminController::class, 'clientsDomainLayanan'])->name('admin.domain.layanan');
+
+        // Route untuk menyimpan domain layanan
+        Route::post('domain-layanan/store', [AdminController::class, 'storeDomainLayanan'])->name('admin.domain.layanan.store');
+
+        // Route untuk mengupdate domain layanan
+        Route::put('domain-layanan/update/{id}', [AdminController::class, 'updateDomainLayanan'])->name('admin.domain.layanan.update');
+
+        // Route untuk menghapus domain layanan
+        Route::delete('domain-layanan/delete/{id}', [AdminController::class, 'deleteDomainLayanan'])->name('admin.domain.layanan.delete');
+
+
         // Menambahkan route untuk create,update, dan delete untuk artikel
         Route::get('/clients-article', [AdminController::class, 'clientsArticle'])->name('clients.article');
         Route::post('/clients-article/store', [AdminController::class, 'storeArticle'])->name('clients.article.store');
@@ -48,16 +109,23 @@ Route::prefix('admin')->group(function () {
 
         Route::post('/clientsAbout/store', [AdminController::class, 'storeClientsAbout'])->name('clientsAbout.store');
 
-        // Routes untuk Material
-        Route::post('/materials/store', [AdminController::class, 'storeMaterial'])->name('materials.store');
-        Route::post('/materials/update/{id}', [AdminController::class, 'updateMaterial'])->name('materials.update');
+        // Route untuk CRUD Material di Material Controller 
+        Route::post('/materials/store', [AdminController::class, 'storeMaterial'])->name('materials.store'); 
+        Route::put('/materials/update/{id}', [AdminController::class, 'updateMaterial'])->name('materials.update'); 
         Route::delete('/materials/delete/{id}', [AdminController::class, 'destroyMaterial'])->name('materials.destroy');
 
-        // Routes untuk Regulation
-        Route::post('/regulations/store', [AdminController::class, 'storeRegulation'])->name('regulations.store');
-        Route::post('/regulations/update/{id}', [AdminController::class, 'updateRegulation'])->name('regulations.update');
-        Route::delete('/regulations/delete/{id}', [AdminController::class, 'destroyRegulation'])->name('regulations.destroy');
-        });
+        // Routes untuk Regulation 
+        Route::get('/admin/regulasi', [AdminController::class, 'regulasi']) ->name('admin.regulasi'); 
+        Route::post('/regulasi', [AdminController::class, 'storeRegulation'])->name('regulations.store'); // Menyimpan regulasi baru 
+        Route::put('/regulasi/{id}', [AdminController::class, 'updateRegulation'])->name('regulations.update'); // Mengupdate regulasi 
+        Route::delete('/regulasi/{id}', [AdminController::class, 'deleteRegulation'])->name('regulations.destroy'); // Menghapus 
+
+       // Routes untuk Application 
+        Route::get('/admin/application', [AdminController::class, 'application'])->name('applications.index'); 
+        Route::post('/admin/application', [AdminController::class, 'storeApplication'])->name('applications.store'); 
+        Route::put('/admin/application/{id}', [AdminController::class, 'updateApplication'])->name('applications.update'); 
+        Route::delete('/admin/application/{id}', [AdminController::class, 'deleteApplication'])->name('applications.destroy'); 
+}); 
 
     // Rute untuk login, signup, dan logout
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -69,3 +137,4 @@ Route::prefix('admin')->group(function () {
     Route::get('/account-created', [AuthController::class, 'accountCreated']);
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+

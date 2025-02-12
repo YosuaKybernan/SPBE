@@ -11,11 +11,10 @@ class Material extends Model
 
     // public $timestamps = false; // Menonaktifkan pengaturan otomatis timestamp
 
-    protected $fillable = [
-        'name', 'download_link', 'created_at', 'modified_at'
-    ];
+    protected $fillable = ['name', 'download_link'];
 
     protected $dates = [
-        'created_at', 'modified_at'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 }
