@@ -82,7 +82,7 @@ class AdminController extends Controller
     // Menampilkan halaman home yang berisi daftar slide
     public function clientsHome()
     {
-        $slides = Slide::all(); // Ambil semua slide
+        $slides = Slide::orderBy('created_at', 'desc')->get(); // Ambil semua slide secara descending
         return view('admin.content.clientsHome', compact('slides'));
     }
 
@@ -117,9 +117,10 @@ class AdminController extends Controller
     }
 
     // Menampilkan form untuk mengedit slide
-    public function editHomeContent(Slide $slide)
+    public function editHomeContent($id)
     {
-        return view('admin.content.editSlide', compact('slide'));
+        $dataslide = Slide::find($id);
+        return view('admin.content.clientsHomeEdit', compact('dataslide'));
     }
 
     // Memperbarui data slide

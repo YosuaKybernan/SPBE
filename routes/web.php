@@ -27,7 +27,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/assessment-mandiri/buat', [AdminController::class, 'createAssessment']);
         Route::get('/assessment-details/{id}', [AdminController::class, 'getAssessmentDetails']);
         Route::post('/update-assessment/{id}', [AdminController::class, 'updateAssessment']);
-        Route::get('/beranda-klien', [AdminController::class, 'clientsHome']);
+        Route::get('/beranda-klien', [AdminController::class, 'clientsHome'])->name('slide_home');
+        Route::get('/beranda-klien-edit/{id}', [AdminController::class, 'editHomeContent'])->name('edit_home');
         Route::get('/domain-klien', [AdminController::class, 'clientsDomain']);
 
         //route untuk menu navbar pada domain 
@@ -49,7 +50,7 @@ Route::prefix('admin')->group(function () {
         // Menambahkan route untuk create,update, dan delete untuk beranda
         Route::get('clientsHome', [AdminController::class, 'clientsHome'])->name('admin.clientsHome');
         Route::post('homeContent', [AdminController::class, 'storeHomeContent'])->name('admin.storeHomeContent');
-        Route::post('/admin/home-content/{id}', [AdminController::class, 'updateHomeContent'])->name('admin.updateHomeContent');
+        Route::patch('/admin/home-content/{id}', [AdminController::class, 'updateHomeContent'])->name('admin.updateHomeContent');
 
          // Route untuk menampilkan daftar domain kebijakan
         Route::get('domain-kebijakan', [AdminController::class, 'clientsDomainKebijakan'])->name('admin.domain.kebijakan');

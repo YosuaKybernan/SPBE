@@ -41,33 +41,29 @@
                             </form>
                         </div>
 
-                        <div id="contentTable">
-                            <table class="table table-bordered mt-4">
+                        <div>
+                            <table class="table table-bordered mt-4"  id="datatable1">
                                 <thead>
                                     <tr>
-                                        <th>Gambar</th>
                                         <th>Judul</th>
                                         <th>Deskripsi</th>
-                                        <th>Unggah Gambar Baru</th>
+                                        <th>Gambar</th>
+                                        <th>Tanggal Upload</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($slides as $slide)
-                                    <form class="editForm" action="{{ route('admin.updateHomeContent', $slide->id) }}" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('POST')
                                         <tr>
+                                            <td>{{$slide->title}}</td>
+                                            <td>{{ $slide->description }}</td>
                                             <td><img src="{{ asset('storage/'.$slide->image) }}" class="img-fluid" style="max-height: 100px; object-fit: contain;"></td>
-                                            <td><input type="text" class="form-control w-100" name="title" value="{{ $slide->title }}"></td>
-                                            <td><textarea class="form-control w-100" name="description" style="resize: none; height: auto;">{{ $slide->description }}</textarea></td>
-                                            <td><input type="file" class="form-control w-100" name="image"></td>
+                                            <td>{{$slide->created_at}}</td>
                                             <td class="d-flex gap-2">
-                                                <button type="submit" class="btn btn-primary" name="action" value="update">Ubah</button>
+                                                <a type="submit" class="btn btn-primary" name="action" value="update" href="{{ route('edit_home', $slide->id) }}">Edit</a>
                                                 <button type="submit" class="btn btn-danger" name="action" value="delete" onclick="return confirm('Apakah Anda yakin ingin menghapus konten ini?');">Hapus</button>
                                             </td>
                                         </tr>
-                                    </form>
                                     @endforeach
                                 </tbody>
                             </table>
